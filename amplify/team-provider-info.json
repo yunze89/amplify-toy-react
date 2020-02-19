@@ -1,0 +1,22 @@
+{
+    "toyenv": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-amplify-toy-toyenv-185643-authRole",
+            "UnauthRoleArn": "arn:aws:iam::104545840310:role/amplify-amplify-toy-toyenv-185643-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::104545840310:role/amplify-amplify-toy-toyenv-185643-authRole",
+            "Region": "ap-northeast-2",
+            "DeploymentBucketName": "amplify-amplify-toy-toyenv-185643-deployment",
+            "UnauthRoleName": "amplify-amplify-toy-toyenv-185643-unauthRole",
+            "StackName": "amplify-amplify-toy-toyenv-185643",
+            "StackId": "arn:aws:cloudformation:ap-northeast-2:104545840310:stack/amplify-amplify-toy-toyenv-185643/239416e0-52fe-11ea-b451-02519e15df86",
+            "AmplifyAppId": "d3sq9k0rdgdb71"
+        },
+        "categories": {
+            "auth": {
+                "amplifytoy1a64d757": {
+                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"784536067799-o4hlhajna49fk33ovmlkd040odqsa2ck.apps.googleusercontent.com\",\"client_secret\":\"pnsVky_tYFrSgE3-SM79UtvT\"}]"
+                }
+            }
+        }
+    }
+}
