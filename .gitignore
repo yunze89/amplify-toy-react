@@ -39,3 +39,6 @@ amplifyxc.config
 
 #IDE idea
 /.idea
+
+#별도 추가 : google client id/secret key 존재
+amplify/team-provider-info.json

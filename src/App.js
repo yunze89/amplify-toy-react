@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Auth} from 'aws-amplify';
+
+import Login from './components/login'
 
 function App() {
   return (
@@ -19,7 +20,9 @@ function App() {
         >
           Learn React
         </a>
-        <button onClick={() => Auth.federatedSignIn({provider: 'Google'})}>Open Google</button>
+
+        {/*login component*/}
+        <Login></Login>
       </header>
     </div>
   );
