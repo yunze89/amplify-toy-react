@@ -7,7 +7,7 @@ class login extends Component {
     //생명 주기
     componentDidMount() {
 
-        //auth event listen
+        //auth event listen, to detect whether the user is signed in or not.
         Hub.listen("auth", ({ payload: { event, data } }) => {
 
             console.log("===auth event=== event : ", event);
@@ -15,23 +15,32 @@ class login extends Component {
 
             switch (event) {
                 case "signIn":
-                    this.setState({ user: data });
+                    //sign in 한 후 attribute를 저장
+                    Auth.currentAuthenticatedUser().then(user=>{
+                        let {attributes} = user;
+                        this.setState({attributes});
+                    });
                     break;
                 case "signOut":
-                    this.setState({ user: null });
+                    this.setState({ attributes: null });
                     break;
                 default:
                     break;
             }
         });
 
+        // check the current user when the App component is loaded
         Auth.currentAuthenticatedUser()
-            .then(user => this.setState({ user }))
+            .then(user => {
+                let {attributes} = user;
+                console.log(attributes)
+                this.setState({attributes});
+            })
             .catch(() => console.log("Not signed in"));
     }
 
     render() {
-        const { user } = this.state;
+        const { attributes } = this.state;
 
         return(
             <div>
@@ -39,7 +48,7 @@ class login extends Component {
                 <button onClick={() => Auth.federatedSignIn()}>Open Hosted UI</button>
                 {
                     //로그아웃 버튼
-                    user ? (<button onClick={() => Auth.signOut()}>Sign Out {user.getUsername()}</button>) : "Login Required!"
+                    attributes ? (<button onClick={() => Auth.signOut()}>Sign Out {attributes.email}</button>) : "Login Required!"
                 }
             </div>
         );
