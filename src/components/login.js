@@ -1,14 +1,14 @@
 import {Auth, Hub} from 'aws-amplify';
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 
-class login extends Component {
-    state = {user: null}
+const Login = ()=>{
+    const [user, setUser] = useState('null');
+    const [authState, setAuthState] = useState('loading');
 
-    //생명 주기
-    componentDidMount() {
+    useEffect(()=>{
 
         //auth event listen, to detect whether the user is signed in or not.
-        Hub.listen("auth", ({ payload: { event, data } }) => {
+        Hub.listen("auth", async({ payload: { event, data } }) => {
 
             console.log("===auth event=== event : ", event);
             console.log("===auth event=== data : ", data);
@@ -16,43 +16,55 @@ class login extends Component {
             switch (event) {
                 case "signIn":
                     //sign in 한 후 attribute를 저장
-                    Auth.currentAuthenticatedUser().then(user=>{
-                        let {attributes} = user;
-                        this.setState({attributes});
-                    });
+                    const {attributes} = await Auth.currentAuthenticatedUser();
+                    setUser({attributes});
+                    setAuthState('signedIn');
                     break;
+
                 case "signOut":
-                    this.setState({ attributes: null });
+                    setAuthState('signIn');
+                    setUser({ attributes: null });
                     break;
+
                 default:
                     break;
             }
         });
 
-        // check the current user when the App component is loaded
-        Auth.currentAuthenticatedUser()
-            .then(user => {
-                let {attributes} = user;
-                console.log(attributes)
-                this.setState({attributes});
-            })
-            .catch(() => console.log("Not signed in"));
-    }
+        //현재 로그인 여부 체크
+        const checkSignedUser = async ()=>{
+            try{
+                const {attributes} = await Auth.currentAuthenticatedUser();
+                setUser({attributes});
+                setAuthState('signedIn');
+                console.log("signedIn", attributes);
+            }catch (e) {
+                setAuthState('signIn');
+                console.log("Not signed in")
+            }
+        }
 
-    render() {
-        const { attributes } = this.state;
+        checkSignedUser();
 
-        return(
-            <div>
-                <button onClick={() => Auth.federatedSignIn({provider: 'Google'})}>Open Google</button>
-                <button onClick={() => Auth.federatedSignIn()}>Open Hosted UI</button>
-                {
-                    //로그아웃 버튼
-                    attributes ? (<button onClick={() => Auth.signOut()}>Sign Out {attributes.email}</button>) : "Login Required!"
-                }
-            </div>
-        );
-    }
-}
+    }, []);
 
-export default login;
+    const signOut = () => Auth.signOut();
+
+    return (
+
+        <div>
+            {authState==='loading' && (<div>loading...</div>)}
+            {authState==='signIn' && (
+                <div>
+                    <button onClick={() => Auth.federatedSignIn({provider: 'Google'})}>Open Google</button>
+                    <button onClick={() => Auth.federatedSignIn()}>Open Hosted UI</button>
+                </div>
+            )}
+            {authState==='signedIn' && (
+                <button onClick={signOut}>Sign Out {user.attributes.email}</button>
+            )}
+        </div>
+    )
+};
+
+export default Login;
