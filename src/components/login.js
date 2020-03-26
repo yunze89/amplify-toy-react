@@ -1,5 +1,6 @@
 import {Auth, Hub} from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
+import StyledButton from './login.styled';
 
 const Login = ()=>{
     const [user, setUser] = useState('null');
@@ -56,12 +57,12 @@ const Login = ()=>{
             {authState==='loading' && (<div>loading...</div>)}
             {authState==='signIn' && (
                 <div>
-                    <button onClick={() => Auth.federatedSignIn({provider: 'Google'})}>Open Google</button>
-                    <button onClick={() => Auth.federatedSignIn()}>Open Hosted UI</button>
+                    <StyledButton backgroundColor="blue" backgroundColorHover="black" onClick={() => Auth.federatedSignIn({provider: 'Google'})}>Open Google</StyledButton>
+                    <StyledButton backgroundColor="green" color="black" onClick={() => Auth.federatedSignIn()}>Open Hosted UI</StyledButton>
                 </div>
             )}
             {authState==='signedIn' && (
-                <button onClick={signOut}>Sign Out {user.attributes.email}</button>
+                <StyledButton onClick={signOut}>Sign Out {user.attributes.email}</StyledButton>
             )}
         </div>
     )
